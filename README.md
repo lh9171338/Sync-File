@@ -1,4 +1,4 @@
-[<img height="23" src="https://github.com/lh9171338/Outline/blob/master/icon.jpg"/>](https://github.com/lh9171338/Outline) Sync-File Package
+[<img height="23" src="https://github.com/lh9171338/Outline/blob/master/icon.jpg"/>](https://github.com/lh9171338/Outline) Sync-File
 ===
 
 这是一个开发机文件同步工具
