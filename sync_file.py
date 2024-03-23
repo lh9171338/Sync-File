@@ -59,14 +59,19 @@ def sync_file(config_file: str):
             logging.info("cmd: {}".format(cmd))
             error_code = os.system(cmd)
             logging.info("error_code: {}".format(error_code))
-            for exclude in excludes:
-                src_sub_folder = os.path.join(backup_folder, exclude)
-                dst_sub_folder = os.path.join(dst_folder, exclude)
-                if os.path.exists(src_sub_folder):
-                    shutil.move(src_sub_folder, dst_sub_folder)
-                    logging.info(
-                        "move {} to {}".format(src_sub_folder, dst_sub_folder)
-                    )
+            if error_code != 0:
+                if os.path.exists(backup_folder):
+                    shutil.move(backup_folder, dst_folder, )
+                    logging.info("restore move {} to {}".format(dst_folder, backup_folder))
+            else:
+                for exclude in excludes:
+                    src_sub_folder = os.path.join(backup_folder, exclude)
+                    dst_sub_folder = os.path.join(dst_folder, exclude)
+                    if os.path.exists(src_sub_folder):
+                        shutil.move(src_sub_folder, dst_sub_folder)
+                        logging.info(
+                            "move {} to {}".format(src_sub_folder, dst_sub_folder)
+                        )
 
     except Exception as e:
         logging.error(e)
