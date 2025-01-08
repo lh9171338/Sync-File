@@ -1,8 +1,8 @@
 [
     {
         "sync": false,
-        "src_path": "vis@yq02-inf-sci-k8s-a800-hbxgn6-0180.yq02.baidu.com:/ssd2/lihao57/AD2.0/PaddleLSD",
-        "dst_path": "/work/AD2.0",
+        "src_path": "<name>@<ip>:<src_path>",
+        "dst_path": "<dst_path>",
         "exclude" : ["data", "py38"]
     }
 ]
