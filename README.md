@@ -6,7 +6,7 @@
 # 安装
 
 ```shell
-git clone ssh://lihao57@icode.baidu.com:8235/baidu/personal-code/Sync-File
+git clone git@github.com:lh9171338/Sync-File.git
 
 # 安装依赖库
 cd Sync-File
@@ -42,8 +42,8 @@ nohup python sync_file.py --config_file config.json --sync_time 01:00 &
 [
     {
         "sync": false,  # 是否同步，true表示同步，false表示不同步
-        "src_path": "vis@yq02-inf-sci-k8s-a800-hbxgn6-0180.yq02.baidu.com:/ssd2/lihao57/AD2.0/PaddleLSD",   # 开发机文件路径
-        "dst_path": "/work/AD2.0",  # 个人虚拟机备份路径
+        "src_path": "<name>@<ip>:<src_path>",   # 源路径
+        "dst_path": "<dst_path>",  # 备份路径
         "exclude" : ["data", "py38"]   # 无需备份的子文件/子文件夹，一般是不经常修改的大文件/文件夹
     }
 ]
