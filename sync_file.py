@@ -43,35 +43,14 @@ def sync_file(config_file: str):
 
             dst_folder = os.path.join(dst_path, os.path.basename(src_path))
             backup_folder = dst_folder + ".bak"
-            if os.path.exists(dst_folder):
-                if os.path.exists(backup_folder):
-                    logging.info(
-                        "remove backup folder: {}".format(backup_folder)
-                    )
-                    shutil.rmtree(backup_folder)
-                shutil.move(dst_folder, backup_folder)
-                logging.info("move {} to {}".format(dst_folder, backup_folder))
 
-            cmd = "rsync -av -e ssh "
+            cmd = f"rsync -av --backup --backup-dir {backup_folder} -e ssh "
             for exclude in excludes:
                 cmd += "--exclude={} ".format(exclude)
             cmd += "{} {}".format(src_path, dst_path)
             logging.info("cmd: {}".format(cmd))
             error_code = os.system(cmd)
             logging.info("error_code: {}".format(error_code))
-            if error_code != 0:
-                if os.path.exists(backup_folder):
-                    shutil.move(backup_folder, dst_folder, )
-                    logging.info("restore move {} to {}".format(dst_folder, backup_folder))
-            else:
-                for exclude in excludes:
-                    src_sub_folder = os.path.join(backup_folder, exclude)
-                    dst_sub_folder = os.path.join(dst_folder, exclude)
-                    if os.path.exists(src_sub_folder):
-                        shutil.move(src_sub_folder, dst_sub_folder)
-                        logging.info(
-                            "move {} to {}".format(src_sub_folder, dst_sub_folder)
-                        )
 
     except Exception as e:
         logging.error(e)
@@ -98,6 +77,12 @@ if __name__ == "__main__":
         help="sync time",
         default="01:00",
     )
+    parser.add_argument(
+        "-n",
+        "--now",
+        action="store_true",
+        help="run now",
+    )
     opt = parser.parse_args()
     print(opt)
 
@@ -105,13 +90,16 @@ if __name__ == "__main__":
 
     config_file = opt.config_file
     sync_time = opt.sync_time
-
-    schedule.every().day.at(sync_time).do(sync_file, config_file)
-    try:
-        while True:
-            schedule.run_pending()
-    except KeyboardInterrupt:
-        pass
+    now = opt.now
+    if now:
+        sync_file(config_file)
+    else:
+        schedule.every().day.at(sync_time).do(sync_file, config_file)
+        try:
+            while True:
+                schedule.run_pending()
+        except KeyboardInterrupt:
+            pass
 
     t2 = time.time()
     logging.info("time: {}".format(t2 - t1))
